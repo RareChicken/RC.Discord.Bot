@@ -11,7 +11,7 @@ namespace RC.KeywordRank.Extensions
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// <see cref="KeywordRank" /> 어셈블리의 서비스들을 추가합니다.
+        /// <see cref="RC.KeywordRank" /> 어셈블리의 서비스들을 추가합니다.
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
@@ -22,7 +22,7 @@ namespace RC.KeywordRank.Extensions
                 throw new ArgumentNullException(nameof(services));
 
             return services
-                .AddSingleton<IKeywordRankProvider, KeywordRankProvider>()
+                .AddSingleton<IKeywordRank, KeywordRank>()
                 .AddSingleton<INaverKeywordRankParser, NaverKeywordRankParser>();
         }
     }

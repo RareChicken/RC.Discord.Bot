@@ -53,7 +53,7 @@ namespace RC.Discord.Bot.EmbedBuilders
             };
 
             int i = 0;
-            foreach (string keyword in rankResult.Keywords)
+            foreach (string keyword in rankResult.KeywordRank)
             {
                 Fields.Add(new EmbedFieldBuilder()
                 {

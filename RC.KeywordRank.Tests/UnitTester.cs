@@ -40,9 +40,9 @@ namespace RC.KeywordRank.Tests
         /// 키워드 순위 제공자 제공
         /// </summary>
         /// <returns></returns>
-        public IKeywordRankProvider GetKeywordRankProvider()
+        public IKeywordRank GetKeywordRankProvider()
         {
-            return Services.GetService<IKeywordRankProvider>();
+            return Services.GetService<IKeywordRank>();
         }
     }
 }

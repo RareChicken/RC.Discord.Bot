@@ -4,9 +4,9 @@ using System.ComponentModel;
 namespace RC.KeywordRank.Constants
 {
     /// <summary>
-    /// 연령대
+    /// 네이버 검색 나이 연령대
     /// </summary>
-    public enum AgeGroup
+    public enum NaverSearchAgeGroup
     {
         /// <summary>
         /// 전체 연령대

@@ -2,27 +2,32 @@
 using RC.KeywordRank.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace RC.KeywordRank.Helpers
+namespace RC.KeywordRank.Services
 {
     /// <summary>
-    /// 네이버 키워드 순위 파서
+    /// 네이버 키워드 순위 제공자
     /// </summary>
-    public interface INaverKeywordRankParser
+    public interface INaverKeywordRankProvider
     {
-        Task<IEnumerable<string>> ParseKeywordRankAsync(AgeGroup ageGroup);
+        Task<IEnumerable<string>> GetKeywordRankAsync(NaverSearchAgeGroup ageGroup, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
-    /// 네이버 키워드 순위 파서
+    /// 네이버 키워드 순위 제공자
     /// </summary>
-    public class NaverKeywordRankParser : KeywordRankParser, INaverKeywordRankParser
+    internal class NaverKeywordRankProvider : INaverKeywordRankProvider
     {
+        #region Fields
+        private readonly IKeywordRankParser _keywordRankParser;
+        #endregion
+
         #region Constructors
-        public NaverKeywordRankParser()
+        public NaverKeywordRankProvider()
         {
-            SearchEngine = SearchEngine.Naver;
+
         }
         #endregion
 
@@ -32,7 +37,7 @@ namespace RC.KeywordRank.Helpers
         /// </summary>
         /// <param name="ageGroup">연령대</param>
         /// <returns>키워드 순위</returns>
-        public async Task<IEnumerable<string>> ParseKeywordRankAsync(AgeGroup ageGroup)
+        public async Task<IEnumerable<string>> GetKeywordRankAsync(NaverSearchAgeGroup ageGroup, CancellationToken cancellationToken = default)
         {
             var document = await GetHtmlDocumentAsync();
 

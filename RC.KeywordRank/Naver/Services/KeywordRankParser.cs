@@ -1,14 +1,25 @@
 ﻿using HtmlAgilityPack;
 using RC.KeywordRank.Constants;
 using RC.KeywordRank.Extensions;
+using RC.KeywordRank.Helpers;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace RC.KeywordRank.Helpers
+namespace RC.KeywordRank.Services
 {
+    public interface IKeywordRankParser
+    {
+        SearchEngine SearchEngine { get; }
+        string TargetUrl { get; }
+
+        Task<IEnumerable<string>> ParseRankAsync(CancellationToken cancellationToken = default);
+    }
+
     /// <summary>
     /// 키워드 순위 파서
     /// </summary>
-    public class KeywordRankParser
+    internal class KeywordRankParser : IKeywordRankParser
     {
         #region Properties
         /// <summary>

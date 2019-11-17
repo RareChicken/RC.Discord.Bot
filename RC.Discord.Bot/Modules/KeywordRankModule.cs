@@ -7,6 +7,7 @@ using RC.KeywordRank.Constants;
 using RC.KeywordRank.Models;
 using System;
 using System.Threading.Tasks;
+using RC.Utilities;
 
 namespace RC.Discord.Bot.Modules
 {
@@ -16,7 +17,7 @@ namespace RC.Discord.Bot.Modules
     public class KeywordRankModule : ModuleBase<SocketCommandContext>
     {
         #region Fields
-        private readonly IKeywordRankProvider _keywordRankProvider;
+        private readonly IKeywordRank _keywordRankProvider;
         private readonly BotConfig _botConfig;
         #endregion
 
@@ -25,14 +26,17 @@ namespace RC.Discord.Bot.Modules
         /// <see cref="KeywordRankModule" />의 새 인스턴스 생성 및 초기화
         /// </summary>
         /// <param name="keywordRankProvider"></param>
+        /// <param name="botConfig"></param>
         /// <exception cref="ArgumentNullException" />
-        public KeywordRankModule([NotNull] IKeywordRankProvider keywordRankProvider, [NotNull] BotConfig botConfig)
+        public KeywordRankModule(
+            [NotNull] IKeywordRank keywordRankProvider,
+            [NotNull] BotConfig botConfig)
         {
-            _keywordRankProvider = keywordRankProvider ??
-                throw new ArgumentNullException(nameof(keywordRankProvider));
+            Check.NotNull(keywordRankProvider, nameof(keywordRankProvider));
+            Check.NotNull(botConfig, nameof(botConfig));
 
-            _botConfig = botConfig ??
-                throw new ArgumentNullException(nameof(botConfig));
+            _keywordRankProvider = keywordRankProvider;
+            _botConfig = botConfig;
         }
         #endregion
 
@@ -42,16 +46,22 @@ namespace RC.Discord.Bot.Modules
         /// </summary>
         /// <returns></returns>
         [Command("네이버실시간검색어", RunMode = RunMode.Async), Alias("네이버실검", "ㄴㅅㄱ"), Summary("네이버 실시간 검색어를 파싱하여 출력하는 커맨드")]
-        public async Task KeywordRankCommandAsync()
+        public async Task NaverKeywordRankCommandAsync()
         {
-            var result = (NaverKeywordRankResult)await _keywordRankProvider.GetKeywordRankAsync(new NaverKeywordRankSearchArgs()
-            {
-                AgeGroup = AgeGroup.AllAges
-            });
-
+            var result = await _keywordRankProvider.GetNaverKeywordRankAsync(NaverSearchAgeGroup.AllAges);
             var embedBuilder = new NaverKeywordRankEmbedBuilder(result, _botConfig);
 
             await Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
+        }
+
+        /// <summary>
+        /// 다음 실시간 검색어 커맨드
+        /// </summary>
+        /// <returns></returns>
+        [Command("다음실시간검색어", RunMode = RunMode.Async), Alias("다음실검", "ㄷㅅㄱ"), Summary("다음 실시간 검색어를 파싱하여 출력하는 커맨드")]
+        public async Task DaumKeywordRankCommandAsync()
+        {
+            // var result = await _keywordRankProvider.GetDaumKeywordRankAsync();
         }
         #endregion
     }

@@ -1,51 +1,32 @@
 ﻿using JetBrains.Annotations;
 using RC.KeywordRank.Constants;
 using RC.KeywordRank.Exceptions;
-using RC.KeywordRank.Helpers;
 using RC.KeywordRank.Interface;
 using RC.KeywordRank.Models;
+using RC.KeywordRank.Services;
+using RC.Utilities;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RC.KeywordRank
 {
     /// <summary>
-    /// 네이버 실시간 검색어 검색 인자
+    /// 실시간 검색어
     /// </summary>
-    public class NaverKeywordRankSearchArgs : IKeywordRankSearchArgs
+    public interface IKeywordRank
     {
-        public NaverKeywordRankSearchArgs()
-        {
-            SearchEngine = SearchEngine.Naver;
-        }
-
-        /// <summary>
-        /// 검색 엔진
-        /// </summary>
-        public SearchEngine SearchEngine { get; set; }
-
-        /// <summary>
-        /// 연령대
-        /// </summary>
-        public AgeGroup AgeGroup { get; set; }
+        Task<IKeywordRankResult> GetKeywordRankAsync<T>([NotNull] T args, CancellationToken cancellationToken = default) where T : IKeywordRankSearchArgs;
+        Task<NaverKeywordRankResult> GetNaverKeywordRankAsync(NaverSearchAgeGroup ageGroup, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
-    /// 실시간 검색어 제공자
+    /// 실시간 검색어
     /// </summary>
-    public interface IKeywordRankProvider
-    {
-        Task<KeywordRankResult> GetKeywordRankAsync<T>([NotNull] T args) where T : IKeywordRankSearchArgs;
-        Task<NaverKeywordRankResult> GetNaverKeywordRankAsync(AgeGroup ageGroup);
-    }
-
-    /// <summary>
-    /// 실시간 검색어 제공자
-    /// </summary>
-    public class KeywordRankProvider : IKeywordRankProvider
+    public class KeywordRank : IKeywordRank
     {
         #region Fields
-        private readonly INaverKeywordRankParser _naverRankKeywordParser;
+        private readonly INaverKeywordRankProvider _naverRankKeywordProvider;
         #endregion
 
         #region Cosntructors
@@ -54,10 +35,11 @@ namespace RC.KeywordRank
         /// </summary>
         /// <param name="naverKeywordRankParser"></param>
         /// <exception cref="ArgumentNullException" />
-        public KeywordRankProvider([NotNull] INaverKeywordRankParser naverKeywordRankParser)
+        public KeywordRank([NotNull] INaverKeywordRankProvider naverKeywordRankParser)
         {
-            _naverRankKeywordParser = naverKeywordRankParser ??
-                throw new ArgumentNullException(nameof(naverKeywordRankParser));
+            Check.NotNull(naverKeywordRankParser, nameof(naverKeywordRankParser));
+
+            _naverRankKeywordProvider = naverKeywordRankParser;
         }
         #endregion
 
@@ -67,7 +49,7 @@ namespace RC.KeywordRank
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public async Task<KeywordRankResult> GetKeywordRankAsync<T>([NotNull] T args) where T : IKeywordRankSearchArgs
+        public async Task<IKeywordRankResult> GetKeywordRankAsync<T>([NotNull] T args, CancellationToken cancellationToken = default) where T : IKeywordRankSearchArgs
         {
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
@@ -75,6 +57,7 @@ namespace RC.KeywordRank
             return args.SearchEngine switch
             {
                 SearchEngine.Naver when args is NaverKeywordRankSearchArgs naverArgs => await GetNaverKeywordRankAsync(naverArgs.AgeGroup),
+
                 _ => throw new KeywordRankSearchArgsTypeIsNotMatchingException(),
             };
         }
@@ -84,12 +67,14 @@ namespace RC.KeywordRank
         /// </summary>
         /// <param name="ageGroup"></param>
         /// <returns></returns>
-        public async Task<NaverKeywordRankResult> GetNaverKeywordRankAsync(AgeGroup ageGroup)
+        public async Task<NaverKeywordRankResult> GetNaverKeywordRankAsync(NaverSearchAgeGroup ageGroup, CancellationToken cancellationToken = default)
         {
+            var keywordRank = await _naverRankKeywordProvider.GetKeywordRankAsync(ageGroup);
+
             return new NaverKeywordRankResult
             {
                 AgeGroup = ageGroup,
-                Keywords = await _naverRankKeywordParser.ParseKeywordRankAsync(ageGroup),
+                KeywordRank = keywordRank,
                 AggragationDateTime = DateTime.Now
             };
         }

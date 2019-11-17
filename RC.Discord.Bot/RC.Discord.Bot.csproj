@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RC.KeywordRank\RC.KeywordRank.csproj" />
+    <ProjectReference Include="..\RC.Utilities\RC.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

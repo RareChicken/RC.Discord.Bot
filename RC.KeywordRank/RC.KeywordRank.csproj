@@ -17,4 +17,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RC.KeywordRank.Daum\RC.KeywordRank.Daum.csproj" />
+    <ProjectReference Include="..\RC.KeywordRank.Naver\RC.KeywordRank.Naver.csproj" />
+    <ProjectReference Include="..\RC.Utilities\RC.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Daum\" />
+  </ItemGroup>
+
 </Project>

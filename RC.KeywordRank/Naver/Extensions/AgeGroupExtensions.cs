@@ -11,7 +11,7 @@ namespace RC.KeywordRank.Extensions
         /// </summary>
         /// <param name="ageGroup">연령대</param>
         /// <returns>DataAge</returns>
-        public static string GetDataAge(this AgeGroup ageGroup)
+        public static string GetDataAge(this NaverSearchAgeGroup ageGroup)
         {
             return ageGroup.GetAttributeProperty<DataAgeAttribute, string>((a) => a.DataAge);
         }
@@ -21,7 +21,7 @@ namespace RC.KeywordRank.Extensions
         /// </summary>
         /// <param name="ageGroup">연령대</param>
         /// <returns>연령대 명칭</returns>
-        public static string GetName(this AgeGroup ageGroup)
+        public static string GetName(this NaverSearchAgeGroup ageGroup)
         {
             return ageGroup.GetAttributeProperty<DescriptionAttribute, string>((a) => a.Description);
         }

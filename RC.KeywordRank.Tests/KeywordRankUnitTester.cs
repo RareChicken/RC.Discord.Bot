@@ -54,7 +54,7 @@ namespace RC.KeywordRank.Tests
         {
             var parser = new NaverKeywordRankParser();
 
-            var keywordRank = await parser.ParseKeywordRankAsync(AgeGroup.AllAges);
+            var keywordRank = await parser.ParseKeywordRankAsync(NaverSearchAgeGroup.AllAges);
 
             Assert.NotNull(keywordRank);
         }
@@ -69,7 +69,7 @@ namespace RC.KeywordRank.Tests
 
             var result = (NaverKeywordRankResult)await parser.GetKeywordRankAsync(new NaverKeywordRankSearchArgs()
             {
-                AgeGroup = AgeGroup.AllAges
+                AgeGroup = NaverSearchAgeGroup.AllAges
             });
 
             Assert.NotNull(result);

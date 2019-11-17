@@ -7,7 +7,7 @@ namespace RC.KeywordRank.Models
     /// <summary>
     /// 키워드 랭크 검색 결과
     /// </summary>
-    public class KeywordRankResult
+    public interface IKeywordRankResult
     {
         /// <summary>
         /// 검색 엔진
@@ -22,6 +22,6 @@ namespace RC.KeywordRank.Models
         /// <summary>
         /// 키워드 목록
         /// </summary>
-        public IEnumerable<string> Keywords { get; set; }
+        public IEnumerable<string> KeywordRank { get; set; }
     }
 }
