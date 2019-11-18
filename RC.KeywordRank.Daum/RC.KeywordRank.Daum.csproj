@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RC.KeywordRank.Abstractions\RC.KeywordRank.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

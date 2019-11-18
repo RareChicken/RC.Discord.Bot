@@ -7,17 +7,12 @@ namespace RC.KeywordRank.Models
     /// <summary>
     /// 네이버 키워드 순위 결과
     /// </summary>
-    public class NaverKeywordRankResult : IKeywordRankResult
+    public class NaverKeywordRankResult : IKeywordRankResult<string>
     {
-        public NaverKeywordRankResult()
-        {
-            SearchEngine = SearchEngine.Naver;
-        }
-
         /// <summary>
         /// 검색 엔진
         /// </summary>
-        public SearchEngine SearchEngine { get; set; }
+        public SearchEngineInfo SearchEngineInfo { get; set; }
 
         /// <summary>
         /// 집계 일시

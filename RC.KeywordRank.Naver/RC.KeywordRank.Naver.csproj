@@ -4,4 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RC.KeywordRank.Abstractions\RC.KeywordRank.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
